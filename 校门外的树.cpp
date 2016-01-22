@@ -44,6 +44,8 @@ int main() {
 					cond = false;
 				}
 				if (arr[2 * i] >= tree[2 * j] && arr[2 * i + 1] <= tree[2 * j + 1]) {
+					arr[2 * i] = 0;
+					arr[2 * i + 1] = 0;
 					continue;
 					cond = false;
 				}
@@ -64,8 +66,9 @@ int main() {
 		
 	}
 	for (int j = 0; j < con; j++) {
+		if (tree[2 * j] == 0) continue;
 		sum += (tree[2 * j + 1] - tree[2 * j] + 1);
 	}
-	cout << (all - sum + 1);
+	cout << (all + 1 - sum);
 	return 0;
 }
