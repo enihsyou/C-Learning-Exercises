@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="校门外的树.cpp">
+    <ClCompile Include="字符串插入.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
