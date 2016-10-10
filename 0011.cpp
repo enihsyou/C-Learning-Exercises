@@ -1,22 +1,19 @@
-﻿#include <iostream>
-using namespace std;
-
+﻿#include <stdio.h>
 int main() {
-    int max = 0;
-    int min = 100;
-    double avg = 0;
-    int n = 0;
-    int inp = 0;
-    while (true) {
-        cin >> inp;
-        if (inp == -999) break;
-        if (inp > 100 || inp < 0) continue;
-        if (inp > max) max = inp;
-        if (inp < min) min = inp;
-        avg = (avg * n + inp) / (n + 1);
-        n++;
+    int a[20], i, j; long d;
+    printf("\n");
+    scanf("%ld", &d); //获取数字
+    for (i = 0; d; i++) {
+        a[i] = d % 10; //写入数字到数组
+        d /= 10;
     }
-    cout << "最大值:" << max << "\n最小值:" << min << "\n成绩个数:" << n << "\n平均值:" << avg;
-    system("pause");
+    for (j = 0; j < i; j++) {
+        if (a[j] != a[i - j - 1]) {
+            break;
+        }
+    }
+    if (i == j) {
+        printf("is 回文\n");
+    }
     return 0;
 }
