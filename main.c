@@ -1,8 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
-
-int main()
+main()
 {
-    printf("Hello world!\n");
-    return 0;
+    int a=2,b=5;
+    printf("%f", 21%9/(float)a+4/b*b);
 }
