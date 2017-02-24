@@ -1,6 +1,5 @@
-#include <iostream>
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
+main() {
+    int arr[3] ={ 1 2 3};
     return 0;
 }
