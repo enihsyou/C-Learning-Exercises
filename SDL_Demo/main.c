@@ -68,11 +68,11 @@ int threadDoReplay(void *data) {
 }
 // 初始化
 void setup() {
-//    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "操作说明", "上下键增减速度\n左右键移动车辆\n空格暂停。", _window);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "操作说明", "鼠标可以点击琴键\n键盘1-7对应白键。", _window);
 
     size(640, 480);
     title("酷炫迷你钢琴🎼");
-    bgcolor(0, 0, 0);
+    bgimage("../image/bg.png");
     cursor("../image/Cur_Select_1_1.png");
 
     backGround = loadimage("../image/bg.png");
@@ -98,8 +98,6 @@ void setup() {
     A = loadsound("../sound/6.wav");
     AS = loadsound("../sound/6#.wav");
     B = loadsound("../sound/7.wav");
-
-    bgimage("../image/bg.png");
 }
 
 // 界面绘图
