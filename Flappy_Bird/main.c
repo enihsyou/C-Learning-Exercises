@@ -426,6 +426,10 @@ void setup() {
     sfx_hit = _sfx_hit1;
     sfx_die = _sfx_die1;
 
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+                             "Flapy Bird",
+                             "SDL2实现的Flappy Bird\n图片来自互联网\nBy 九条涼果 @enihsyou",
+                             _window);
     createPipeQueue();
     current_state = PREPARING;
     thread(birdSpriteRoll, NULL);
