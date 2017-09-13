@@ -8,6 +8,7 @@ typedef struct {
     int pipe_x;
     int pipe_y;
     int gap_size;
+    SDL_bool apple;
     SDL_bool passed;
 } Pipe;
 typedef struct {

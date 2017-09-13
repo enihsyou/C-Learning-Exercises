@@ -31,16 +31,18 @@ ImageP
     img_background, img_scoreboard, img_base, img_bird, img_pipe, img_splash, img_replay,
     img_medal_bronze, img_medal_silver, img_medal_gold, img_medal_platinum,
     N_0, N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9,
-    N_M_0, N_M_1, N_M_2, N_M_3, N_M_4, N_M_5, N_M_6, N_M_7, N_M_8, N_M_9;
+    N_M_0, N_M_1, N_M_2, N_M_3, N_M_4, N_M_5, N_M_6, N_M_7, N_M_8, N_M_9,
+    img_apple;
 SoundP
-    sfx_wing, sfx_swooshing, sfx_hit, sfx_die, sfx_score;
+    sfx_wing, sfx_swooshing, sfx_hit, sfx_die, sfx_score, sfx_gold;
 
 ThreadP threadLoop;
 
 /*备选项*/
 ImageP
     _img_background_day, _img_background_night,
-    _img_pipe_green, _img_pipe_red,
+    _img_pipe_green, _img_pipe_red, _img_pipe_green_old, _img_pipe_red_2, _img_pipe_blue_2,
+    _img_pipe_green_2, _img_pipe_yellow_2, _imge_bird_twitter_1, _imge_bird_twitter_2, _imge_bird_twitter_3,
     _img_bird_blue_downflap, _img_bird_blue_midflap, _img_bird_blue_upflap,
     _img_bird_red_downflap, _img_bird_red_midflap, _img_bird_red_upflap,
     _img_bird_yellow_downflap, _img_bird_yellow_midflap, _img_bird_yellow_upflap;
@@ -120,6 +122,7 @@ Pipe getRandomPipe() {
     result.pipe_x = SCREEN_WIDTH;
     result.pipe_y = SCREEN_HEIGHT - PIPE_HEIGHT + random_int(-70, 70);
     result.passed = SDL_FALSE;
+    result.apple = rand() % 5 ? SDL_FALSE : SDL_TRUE;
     return result;
 }
 
@@ -163,6 +166,8 @@ void birdDrop();
 void birdScore();
 /*小鸟向上跳一下*/
 void birdJump();
+/*小鸟得到苹果*/
+void birdGold();
 /*处理元素的线程函数*/
 int gameLoop(void *ptr);
 /*循环切换鸟图*/
@@ -206,6 +211,7 @@ void birdScore() {
     playsound(sfx_score);
     score += 1;
 }
+
 
 
 int gameLoop(void *ptr) {
@@ -281,6 +287,8 @@ int gameLoop(void *ptr) {
         if (bird_box_left > pipe_box_right) {
             next_pipe->passed = SDL_TRUE;
             birdScore();
+            if (next_pipe->apple)
+                birdGold();
         }
         /*把所有管道都左移一段距离*/
         if (!isQueueEmpty()) {
@@ -305,6 +313,11 @@ terminate_process:
     return 0;
 }
 
+void birdGold() {
+    playsound(sfx_gold);
+    score += 1;
+}
+
 void birdJump() {
     playsound(sfx_wing);
     velocity = -JUMPING_ABILITY;
@@ -319,7 +332,8 @@ void startGame() {
     birdJump();
 }
 
-BirdSprites birdSprites[3];
+BirdSprites birdSprites[4];
+ImageP pipes[7];
 int bird_sprite_index = 0;
 
 // 初始化
@@ -330,14 +344,23 @@ void setup() {
     title("Flappy Bird");
     bgcolor(0, 0, 0);
     cursor("image/cursor.png");
-    Bitmap *b = loadbitmap("image/yellowbird-midflap.png");
+    Bitmap *b = loadbitmap("image/Flappy_Bird_icon.png");
     SDL_SetWindowIcon(_window, b);
     SDL_FreeSurface(b);
 
     _img_background_day = loadimage("image/background-day.png");
     _img_background_night = loadimage("image/background-night.png");
-    _img_pipe_green = loadimage("image/pipe-green.png");
-    _img_pipe_red = loadimage("image/pipe-red.png");
+    _img_pipe_green = pipes[6] = loadimage("image/pipe-green.png");
+    _img_pipe_red = pipes[0] = loadimage("image/pipe-red.png");
+    _img_pipe_green_old = pipes[1] = loadimage("image/pipe-green_old.png");
+    _img_pipe_red_2 = pipes[2] = loadimage("image/pipe_red_2.png");
+    _img_pipe_blue_2 = pipes[3] = loadimage("image/pipe_blue_2.png");
+    _img_pipe_green_2 = pipes[4] = loadimage("image/pipe_green_2.png");
+    _img_pipe_yellow_2 = pipes[5] = loadimage("image/pipe_yellow_2.png");
+
+    _imge_bird_twitter_1 = loadimage("image/bird_twitter_1.png");
+    _imge_bird_twitter_2 = loadimage("image/bird_twitter_2.png");
+    _imge_bird_twitter_3 = loadimage("image/bird_twitter_3.png");
     _img_bird_blue_downflap = loadimage("image/bluebird-downflap.png");
     _img_bird_blue_midflap = loadimage("image/bluebird-midflap.png");
     _img_bird_blue_upflap = loadimage("image/bluebird-upflap.png");
@@ -353,6 +376,8 @@ void setup() {
         {.upflap=_img_bird_blue_upflap, .midflap=_img_bird_blue_midflap, .downflap = _img_bird_blue_downflap};
     birdSprites[2] = (BirdSprites)
         {.upflap=_img_bird_red_upflap, .midflap=_img_bird_red_midflap, .downflap = _img_bird_red_downflap};
+    birdSprites[3] = (BirdSprites)
+        {.upflap=_imge_bird_twitter_1, .midflap=_imge_bird_twitter_2, .downflap = _imge_bird_twitter_3};
 
     img_background = _img_background_day;
     img_bird = _img_bird_yellow_midflap;
@@ -366,6 +391,8 @@ void setup() {
     img_medal_silver = loadimage("image/medal_silver.png");
     img_medal_gold = loadimage("image/medal_gold.png");
     img_medal_platinum = loadimage("image/medal_platinum.png");
+
+    img_apple = loadimage("image/apple.png");
 
     N_0 = loadimage("image/0.png");
     N_1 = loadimage("image/1.png");
@@ -395,6 +422,7 @@ void setup() {
     sfx_wing = loadsound("sound/sfx_wing.ogg");
     sfx_swooshing = loadsound("sound/sfx_swooshing.ogg");
     sfx_score = loadsound("sound/sfx_point.ogg");
+    sfx_gold = loadsound("sound/ding.ogg");
     sfx_hit = _sfx_hit1;
     sfx_die = _sfx_die1;
 
@@ -426,6 +454,9 @@ void drawPipes() {
             imagerotated(img_pipe,
                          pipe->info.pipe_x,
                          pipe->info.pipe_y - PIPE_HEIGHT - pipe->info.gap_size, 180);
+            if (pipe->info.apple && !pipe->info.passed) {
+                image(img_apple, pipe->info.pipe_x + PIPE_WIDTH, pipe->info.pipe_y - 60);
+            }
             if (!pipe->ptr) break;
             pipe = pipe->ptr;
         }
@@ -500,8 +531,8 @@ void restartGame() {
     score = 0;
     clearQueue();
     img_background = rand() % 2 ? _img_background_day : _img_background_night;
-    img_pipe = rand() % 2 ? _img_pipe_green : _img_pipe_red;
-    bird_sprite_index = rand() % 3;
+    img_pipe = pipes[rand() % 7];
+    bird_sprite_index = rand() % 4;
     img_bird = birdSprites[bird_sprite_index].midflap;
     sfx_hit = rand() % 2 ? _sfx_hit1 : _sfx_hit2;
     sfx_die = rand() % 2 ? _sfx_die1 : _sfx_die2;
@@ -575,10 +606,19 @@ void close() {
     unloadimage(img_base);
     unloadimage(img_splash);
     unloadimage(img_replay);
+    unloadimage(img_apple);
     unloadimage(img_medal_bronze);
     unloadimage(img_medal_silver);
     unloadimage(img_medal_gold);
     unloadimage(img_medal_platinum);
+    unloadimage(_img_pipe_green_old);
+    unloadimage(_img_pipe_red_2);
+    unloadimage(_img_pipe_blue_2);
+    unloadimage(_img_pipe_green_2);
+    unloadimage(_img_pipe_yellow_2);
+    unloadimage(_imge_bird_twitter_1);
+    unloadimage(_imge_bird_twitter_2);
+    unloadimage(_imge_bird_twitter_3);
     unloadimage(N_0);
     unloadimage(N_1);
     unloadimage(N_2);
@@ -606,5 +646,6 @@ void close() {
     unloadsound(sfx_wing);
     unloadsound(sfx_swooshing);
     unloadsound(sfx_score);
+    unloadsound(sfx_gold);
 }
 
