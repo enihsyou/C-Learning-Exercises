@@ -194,7 +194,7 @@ void birdDead() {
 
 void birdHit() {
     playsound(sfx_hit);
-    birdDead();
+    birdDrop();
 }
 
 void birdDrop() {
@@ -265,9 +265,13 @@ int gameLoop(void *ptr) {
             if (bird_box_top <= pipe_box_top || bird_box_bottom >= pipe_box_bottom) {
                 birdHit();
                 // thread(easeInTransition, (void *) opacity);
-                while (position < BASE_OFFSET - bird_box_height) {
+                int temp = bird_box_height;
+                while (position < BASE_OFFSET - temp) {
                     velocity += GRAVITY;
                     position += velocity;
+                    rotation = (int) (min(8 * velocity, 90));
+
+                    temp = (int) (BIRD_HEIGHT + sin(rotation * M_PI / 180.0) * 8);
                     delay(1000 / 60);
                 }
                 goto terminate_process;

@@ -72,15 +72,15 @@ void pipeDeque() {
     _front1 = _node_front;
 
     if (_front1 == NULL) {
-        printf("\n Error: Trying to display elements from empty queue");
+//        printf("\n Error: Trying to display elements from empty queue");
         return;
     } else if (_front1->ptr != NULL) {
         _front1 = _front1->ptr;
-        printf("\n Dequed value : %d", _node_front->info);
+//        printf("\n Dequed value : %d", _node_front->info);
         free(_node_front);
         _node_front = _front1;
     } else {
-        printf("\n Dequed value : %d", _node_front->info);
+//        printf("\n Dequed value : %d", _node_front->info);
         free(_node_front);
         _node_front = NULL;
         _node_rear = NULL;
@@ -93,7 +93,7 @@ struct PipeQueueNode * frontElement() {
     if ((_node_front != NULL) && (_node_rear != NULL))
         return _node_front;
     else
-        printf("!!!");
+//        printf("!!!");
         return NULL;
 }
 
