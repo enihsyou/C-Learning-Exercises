@@ -344,7 +344,7 @@ void setup() {
     title("Flappy Bird");
     bgcolor(0, 0, 0);
     cursor("image/cursor.png");
-    Bitmap *b = loadbitmap("image/Flappy_Bird_icon.png");
+    SDL_Surface *b = IMG_Load("image/Flappy_Bird_icon.png");
     SDL_SetWindowIcon(_window, b);
     SDL_FreeSurface(b);
 
